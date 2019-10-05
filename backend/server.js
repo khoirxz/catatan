@@ -31,6 +31,53 @@ Routes.route("/").get((req, res) => {
   });
 });
 
+Routes.route("/add").post((req, res) => {
+  let todo = new SchemaModel(req.body);
+
+  console.log(todo);
+  todo
+    .save()
+    .then(result => {
+      res.status(200).json({ todo: "Catatan ditambahkan" });
+    })
+    .catch(err => {
+      res.status(400).send({
+        pesan: "gagal menambahkan",
+        status: "fail"
+      });
+    });
+});
+
+Routes.route("/:id").get((req, res) => {
+  let id = req.params.id;
+
+  SchemaModel.findById(id, (err, result) => {
+    res.json(result);
+  });
+});
+
+Routes.route("/update/:id").post((req, res) => {
+  SchemaModel.findById(req.params.id, (err, result) => {
+    if (!result) {
+      res.status(400).send("Data tidak ditemukan");
+    } else {
+      result.title = req.body.title;
+      result.description = req.body.description;
+      result.date = req.body.date;
+      result.completed = req.body.completed;
+
+      result
+        .save()
+        .then(data => {
+          res.json("Catatan terupdate");
+        })
+        .catch(err => {
+          res.status(400).send("Gagal mengupate Data");
+        });
+    }
+  });
+});
+
 app.use("/log", Routes);
 
 app.listen(port, () => {

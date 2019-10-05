@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const SchemaModel = new Schema({
   title: { type: String, required: true },
-  descriptoion: { type: String, required: true },
+  description: { type: String, required: true },
   date: { type: Date, required: true },
   completed: { type: Boolean }
 });
